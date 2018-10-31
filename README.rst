@@ -26,7 +26,7 @@ options is a bit more complexe:
    Currently, it supports two keys, 'when' and 'echo'.
 
 
-'when':
+   * when:
 
    This key is used to listen to events occuring on the STDOUT of the subprogram
    The value have to be an array of events
@@ -41,14 +41,14 @@ options is a bit more complexe:
 
       def callback(processcontroller, string)
 
-   You can automates user inputs in your callback when required by the subprogram using the `send` function of your ProcessController instance::
+   You can automates user inputs in your callback when required by the subprogram using the *send* function of your ProcessController instance::
 
       def cb(p, s):
          c.send('some input')
 
 
 
-'echo':
+   * echo:
 
    This key is a boolean that defaults to False.
    When set to True, the ProcessController will print the input sent to your subprogram where it has been asked
