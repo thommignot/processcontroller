@@ -3,50 +3,52 @@ ProcessController: a kind of replacement for that old pexpect.
 
 Import the main class::
 
-   `from processcontroller import ProcessController`
+   from processcontroller import ProcessController
 
 
 Create a new instance::
 
-   `process_controller = ProcessController()`
+   process_controller = ProcessController()
 
 
 Run a subprogram::
 
-   `process_controller.run(command, options)`
+   process_controller.run(command, options)
 
 
 
-The command parameter must be an array like `['/usr/bin/python', 'file.py']`
+The command parameter must be an array like::
 
-options is a bit more complexe::
+   ['/usr/bin/python', 'file.py']
+
+options is a bit more complexe:
 
    Currently, it supports two keys, 'when' and 'echo'.
 
 
-'when'::
+'when':
 
    This key is used to listen to events occuring on the STDOUT of the subprogram
    The value have to be an array of events
-   The "event" is in fact a match for some pattern:
+   The "event" is in fact a match for some pattern::
 
-      `'when': [
+      'when': [
          ['^SomeRegex.*$', callback],
          ['^An other one.$', cb]
-      ]`
+      ]
 
-   The callbacks will be called with two arguments: the ProcessController instance, and the matched string
+   The callbacks will be called with two arguments: the ProcessController instance, and the matched string::
 
-      `def callback(processcontroller, string)`
+      def callback(processcontroller, string)
 
-   You can automates user inputs in your callback when required by the subprogram using the `send` function of your ProcessController instance
+   You can automates user inputs in your callback when required by the subprogram using the `send` function of your ProcessController instance::
 
-      `def cb(p, s):
+      def cb(p, s):
          c.send('some input')
-      `
 
 
-'echo'::
+
+'echo':
 
    This key is a boolean that defaults to False.
    When set to True, the ProcessController will print the input sent to your subprogram where it has been asked
