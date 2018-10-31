@@ -37,13 +37,11 @@ class _Reader:
 
 class ProcessController():
     def __init__(self):
-        self.options = {}
         self.pipes = {
             'parent_to_child': os.pipe(),
             'child_to_parent': os.pipe()
         }
-        self.read = True
-        self.reader = None
+        self.return_value = None
 
     def __handle_line(self, s):
         print(s, end='')
@@ -61,10 +59,12 @@ class ProcessController():
 
             self.reader = _Reader(self.pipes['child_to_parent'][OUT])
             try:
-                while os.waitpid(pid, os.WNOHANG) == (0, 0):
+                ret = os.waitpid(pid, os.WNOHANG)
+                while ret == (0, 0):
                     s = self.reader.readline(0.1)
                     if s:
                         self.__handle_line(s)
+                    ret = os.waitpid(pid, os.WNOHANG)
 
             except ChildProcessError:
                 pass
@@ -75,6 +75,7 @@ class ProcessController():
                     self.__handle_line(s)
                     s = self.reader.readline(0.1)
                 self.reader.read = False
+                return ret
 
         else:
             os.dup2(self.pipes['parent_to_child'][OUT], pty.STDIN_FILENO)
@@ -95,5 +96,5 @@ class ProcessController():
 
     def run(self, cmd, opt={}):
         self.options = opt
-        self.__fork(cmd)
+        pid, self.return_value = self.__fork(cmd)
         return
