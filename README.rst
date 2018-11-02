@@ -1,6 +1,10 @@
 ProcessController: a kind of replacement for that old pexpect.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+Install the package::
+
+   pip install --user processcontroller
+
 Import the main class::
 
    from processcontroller import ProcessController

@@ -10,7 +10,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-VERSION = '@VERSION'
+VERSION = '0.0.1'
 
 
 setup(
@@ -18,7 +18,8 @@ setup(
     version=VERSION if '@' not in VERSION else 'dev',
     description='Replacement for pexpect',
     author='Thomas Mignot',
-    author_email='thommignot@gmail.com',
+    author_email='tmig@yourlabs.org',
+    url='https://github.com/thommignot/processcontroller',
     packages=['processcontroller'],
     include_package_data=True,
     long_description=read('README.rst'),
