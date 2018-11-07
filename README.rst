@@ -5,7 +5,7 @@ ProcessController: a kind of replacement for that old pexpect.
 Fast Start
 ==========
 
-Install the package::
+Install the package:
 
 .. code: bash
 
