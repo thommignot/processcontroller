@@ -12,12 +12,16 @@ Install the package:
    pip install --user processcontroller
 
 
-Import the main class::
+Import the main class:
+
+.. code:: python
 
    from processcontroller import ProcessController
 
 
-Create a new instance::
+Create a new instance:
+
+.. code:: python
 
    process_controller = ProcessController()
 
@@ -28,42 +32,55 @@ The ProcessController() instance
 Methods
 -------
 
-* The run() method::
-
-   process_controller.run(command, options)
+* The run() method:
 
    Run a program (command and options detailed below)
 
+.. code:: python
 
-* The send() method::
+   process_controller.run(command, options)
 
-   process_controller.send(str|bytes)
+
+
+* The send() method:
 
    Send a string or bytearray to the subprogram stdin, you will usually use it inside a callback or in detached state
 
+.. code:: python
 
-* The close() method::
+   process_controller.send(str|bytes)
 
-   process_controller.close()
+
+* The close() method:
 
    Close the stdin of the subprogram so it reaches EOF, you will usually use it inside a callback or in detached state
 
+.. code:: python
 
-* The kill() method::
+   process_controller.close()
 
-   process_controller.kill()
+
+
+* The kill() method:
 
    Sends signal SIGKILL to the subprogram, the return_value should be (pid, 9) after that.
    (this should not be so used to be honest)
 
+.. code:: python
 
-* The wait() method::
+   process_controller.kill()
 
-   process_controller.wait()
+
+
+* The wait() method:
 
    Used to synchronise the caller with the detached instance of ProcessController
    Waits for the queue buffer to be handled and emptied.
    If your process reads stdin such as bash or things like cat, be sure to call close() or you'll end up with an infinite loop here
+
+.. code:: python
+
+   process_controller.wait()
 
 
 Attributes
@@ -85,21 +102,25 @@ ProcessController.run()
 command
 _______
 
-The command parameter must be an array like::
+The command parameter must be an array like:
+
+.. code:: python
 
    ['/usr/bin/python', 'file.py']
+
 
 options
 _______
 
 Currently, it supports the following keys, 'when', 'input', 'echo' and 'detached'
 
-
 * when:
 
 This key is used to listen to events occuring on the STDOUT of the subprogram
 The value have to be an array of events
-The "event" is in fact a match for some pattern::
+The "event" is in fact a match for some pattern:
+
+.. code:: python
 
    'when': [
       ['^SomeRegex.*\n', callback],
@@ -112,11 +133,15 @@ maybe I'll add an option to avoid such an expansive operation in the future
 Every time a '\n' char is found, the line is treated once and reseted to ''
 
 
-The callbacks will be called with two arguments: the ProcessController instance, and the matched string::
+The callbacks will be called with two arguments: the ProcessController instance, and the matched string:
+
+.. code:: python
 
    def callback(processcontroller, string)
 
-You can automates user inputs in your callback when required by the subprogram using the *send* function of your ProcessController instance::
+You can automates user inputs in your callback when required by the subprogram using the *send* function of your ProcessController instance:
+
+.. code:: python
 
    def cb(p, s):
       c.send('some input')
@@ -124,18 +149,22 @@ You can automates user inputs in your callback when required by the subprogram u
 
 * input:
 
-This key is used to pre-fill the stdin of a subprogram before running it::
+This key is used to pre-fill the stdin of a subprogram before running it:
+
+.. code:: python
 
    pc = ProcessController()
    pc.run(['/bin/bash'], {
       'input': 'echo test && exit'
    })
 
-You can set an array of input::
+You can set an array of input:
+
+.. code:: python
 
    'input': ['one', 'two', 'three']  # sends "one\ntwo\nthree\n"
 
-   You can input str or bytes, conversion is handled for you
+You can input str or bytes, conversion is handled for you
 
 * echo:
 
@@ -145,7 +174,11 @@ When set to True, the ProcessController will print the input sent to your subpro
 
 * detached:
 
-This key is used to make the program run in its own thread, making the call to run non-blocking::
+This key is used to make the program run in its own thread, making the call to run non-blocking:
+
+.. code:: python
+
+   process_controller.wait()
 
    pc = ProcessController()
    pc.run(['/bin/bash'], {
