@@ -13,7 +13,9 @@ Fast Start
 
 Install the package::
 
-   :code:`pip install --user processcontroller`
+.. code-block:: py
+
+   pip install --user processcontroller
 
 Import the main class::
 
