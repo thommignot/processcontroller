@@ -7,7 +7,10 @@ Fast Start
 
 Install the package::
 
+.. code: bash
+
    pip install --user processcontroller
+
 
 Import the main class::
 
@@ -56,11 +59,11 @@ Methods
 
 * The wait() method::
 
-  process_controller.wait()
+   process_controller.wait()
 
-  Used to synchronise the caller with the detached instance of ProcessController
-  Waits for the queue buffer to be handled and emptied.
-  If your process reads stdin such as bash or things like cat, be sure to call close() or you'll end up with an infinite loop here
+   Used to synchronise the caller with the detached instance of ProcessController
+   Waits for the queue buffer to be handled and emptied.
+   If your process reads stdin such as bash or things like cat, be sure to call close() or you'll end up with an infinite loop here
 
 
 Attributes
