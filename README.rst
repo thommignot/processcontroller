@@ -7,7 +7,7 @@ Fast Start
 
 Install the package:
 
-.. code: bash
+.. code:: bash
 
    pip install --user processcontroller
 
