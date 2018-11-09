@@ -1,3 +1,4 @@
+import copy
 import os
 import pty
 import re
@@ -59,6 +60,7 @@ class ProcessController():
         self.pid = 0
         self.closed = False
         self.private = False
+        self.environ = copy.copy(os.environ)
 
     def __handle_line(self, line, char):
         if not self.private:
@@ -122,7 +124,7 @@ class ProcessController():
             os.dup2(self.pipes['child_to_parent'][IN], pty.STDOUT_FILENO)
             os.close(self.pipes['parent_to_child'][IN])
             os.close(self.pipes['child_to_parent'][OUT])
-            os.execve(cmd[0], cmd, os.environ)
+            os.execve(cmd[0], cmd, self.environ)
 
     def send(self, s):
         if self.return_value != (0, 0):
