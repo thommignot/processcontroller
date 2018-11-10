@@ -1,0 +1,17 @@
+qa:
+  stage: test
+  image: yourlabs/python
+  script: flake8
+
+pytest:
+  stage: test
+  image: yourlabs/python
+  script: pip install -e . && py.test -v
+
+pypi:
+  stage: deploy
+  only:
+  - /^v\d+\./
+  image: yourlabs/python:autoplay
+  script:
+  - autoplay run twine
