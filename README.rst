@@ -201,6 +201,11 @@ It's value can be 'line' or 'char'
 Useful to read prompts or anything that does not end with an EOL
 
 
+* decode:
+
+This option is used to tell processcontroller to decode or not what is read from the subprogram, True by default
+
+
 Don't forget that you have to create a new instance a ProcessController everytime you want to execute a new subprogram
 
 Please feel free to read the tests and code for a better understanding
