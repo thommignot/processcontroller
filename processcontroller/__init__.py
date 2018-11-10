@@ -15,30 +15,30 @@ OUT = 0
 
 class _Reader:
 
-    def __init__(self, stream, mode='line'):
+    def __init__(self, stream, mode='line', convert_bytes=True):
         self._s = stream
         self._q = Queue()
         self.reading = True
         self.readmode = mode
-        self.line = ''
+        self.line = b''
 
-        def _populateQueue(stream, queue):
+        def _populate_queue(stream, queue):
             if self.readmode == 'line':
                 while self.reading:
-                    self.line = ''
-                    while not len(self.line) or self.line[-1] != '\n':
-                        self.line += os.read(stream, 1).decode()
-                    queue.put((self.line, '\n'))
+                    self.line = b''
+                    while not len(self.line) or self.line[-1] != 10:
+                        self.line += os.read(stream, 1)
+                    queue.put((self.line, b'\n'))
             else:
-                char = ''
+                char = b''
                 while self.reading:
-                    if char == '\n':
-                        self.line = ''
-                    char = os.read(stream, 1).decode()
+                    if char == 10:
+                        self.line = b''
+                    char = os.read(stream, 1)
                     self.line += char
                     queue.put((self.line, char))
 
-        self._t = Thread(target=_populateQueue, args=(self._s, self._q))
+        self._t = Thread(target=_populate_queue, args=(self._s, self._q))
         self._t.daemon = True
         self._t.start()
 
@@ -60,20 +60,24 @@ class ProcessController():
         self.pid = 0
         self.closed = False
         self.private = False
+        self.decode = True
         self.environ = copy.copy(os.environ)
 
     def __handle_line(self, line, char):
         if not self.private:
             if self.readmode == 'line':
-                os.write(pty.STDOUT_FILENO, line.encode())
+                os.write(pty.STDOUT_FILENO, line)
             else:
-                os.write(pty.STDOUT_FILENO, char.encode())
+                os.write(pty.STDOUT_FILENO, char)
 
         if 'when' in self.options:
             for w in self.options['when']:
-                pattern = re.compile(w[0])
+                pattern = re.compile(w[0].encode())
                 if re.match(pattern, line):
-                    w[1](self, line)
+                    if self.decode:
+                        w[1](self, line.decode())
+                    else:
+                        w[1](self, line)
 
     def __input(self):
         if 'input' in self.options:
@@ -152,6 +156,9 @@ class ProcessController():
             self.readmode = 'char'
         else:
             self.readmode = 'line'
+
+        if 'decode' in opt and not opt['decode']:
+            self.decode = False
 
         if 'detached' in opt and opt['detached'] is True:
             self.thread = Thread(target=self.__fork, args=(cmd,))
