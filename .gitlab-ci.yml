@@ -6,7 +6,7 @@ qa:
 pytest:
   stage: test
   image: yourlabs/python
-  script: py.test -v
+  script: pip install -e . && py.test -v
 
 pypi:
   stage: deploy
